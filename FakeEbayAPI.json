@@ -1,0 +1,843 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "fakeEbayAPI",
+    "version": "1.0",
+    "contact": {
+      "name": "Ville Prittinen",
+      "email": "t7prvi00@students.oamk.fi"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Ville Prittinen"
+    }
+  ],
+  "paths": {
+    "/users/{userId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing user."
+        }
+      ],
+      "get": {
+        "summary": "Get User Info by User ID",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "User Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Get User Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          }
+        },
+        "operationId": "get-users-userId",
+        "description": "Retrieve the information of the user with the matching user ID."
+      },
+      "patch": {
+        "summary": "Update User Information",
+        "operationId": "patch-users-userId",
+        "responses": {
+          "200": {
+            "description": "User Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "Updated User Rebecca Baker": {
+                    "value": {
+                      "id": 13,
+                      "firstName": "Rebecca",
+                      "lastName": "Baker",
+                      "email": "rebecca@gmail.com",
+                      "dateOfBirth": "1985-10-02",
+                      "emailVerified": false,
+                      "createDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "description": "Update the information of an existing user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "If a new email is given, the user's email verified property will be set to false."
+                  },
+                  "dateOfBirth": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name & Date of Birth": {
+                  "value": {
+                    "lastName": "Baker",
+                    "dateOfBirth": "1985-10-02"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch user properties to update."
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Create New User",
+        "operationId": "post-user",
+        "responses": {
+          "200": {
+            "description": "User Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "New User Bob Fellow": {
+                    "value": {
+                      "id": 12,
+                      "firstName": "Bob",
+                      "lastName": "Fellow",
+                      "email": "bob.fellow@gmail.com",
+                      "dateOfBirth": "1996-08-24",
+                      "emailVerified": false,
+                      "createDate": "2020-11-18"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "dateOfBirth"
+                ]
+              },
+              "examples": {
+                "Create User Bob Fellow": {
+                  "value": {
+                    "firstName": "Bob",
+                    "lastName": "Fellow",
+                    "email": "bob.fellow@gmail.com",
+                    "dateOfBirth": "1996-08-24"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new user."
+        },
+        "description": "Create a new user."
+      }
+    },
+    "/posts": {
+      "get": {
+        "summary": "get all postings",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "posting": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "minItems": 1,
+                      "items": {
+                        "required": [
+                          "id",
+                          "title",
+                          "description",
+                          "askingprice",
+                          "dateofposting",
+                          "deliverytype",
+                          "seller name",
+                          "selleremail",
+                          "location"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "title": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "askingprice": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "dateofposting": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "deliverytype": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "seller name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "selleremail": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "category": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "items": {
+                              "required": [
+                                "category0",
+                                "category1",
+                                "jne"
+                              ],
+                              "properties": {
+                                "category0": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "category1": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "jne": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              }
+                            }
+                          },
+                          "images": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "minItems": 1,
+                            "items": {
+                              "required": [
+                                "kuvat tänne jotenki"
+                              ],
+                              "properties": {
+                                "kuvat tänne jotenki": {
+                                  "type": "string",
+                                  "minLength": 1
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "posting"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "posting": [
+                        {
+                          "id": "string",
+                          "title": "string",
+                          "description": "string",
+                          "askingprice": "string",
+                          "dateofposting": "string",
+                          "deliverytype": "string",
+                          "seller name": "string",
+                          "selleremail": "string",
+                          "location": "string",
+                          "category": [
+                            {
+                              "category0": "string",
+                              "category1": "string",
+                              "jne": "string"
+                            }
+                          ],
+                          "images": [
+                            {
+                              "kuvat tänne jotenki": "string"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-posts",
+        "description": "gets all postings"
+      },
+      "post": {
+        "summary": "Create a posting",
+        "operationId": "post-posts",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "description": "creates a posting"
+      }
+    },
+    "/posts/{postId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "postId",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "patch": {
+        "summary": "",
+        "operationId": "patch-posts-postId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "description": "edits a posting specified by id",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "postId",
+            "description": "id of a specific posting"
+          }
+        ]
+      },
+      "delete": {
+        "summary": "",
+        "operationId": "delete-posts-postId",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "description": "deletes a posting specified by id",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "postId",
+            "description": "id of a specific posting"
+          }
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "",
+        "operationId": "post-login",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "APIkey": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "APIkey": "984u-yrsa-iogh-98sg-a78g"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "userPassword": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "email",
+                  "userPassword"
+                ],
+                "x-examples": {
+                  "example-1": {
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "",
+        "operationId": "post-register",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "email": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "userPassword": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "Name",
+                  "email",
+                  "userPassword"
+                ],
+                "x-examples": {
+                  "example-1": {
+                    "Name": "Alice",
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "Name": "Alice",
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/{category}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "category",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "get specified categorys posts",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-posts-category",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "category",
+            "description": "a specific category"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "category",
+            "description": "a specific category"
+          }
+        ]
+      }
+    },
+    "/posts/{location}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "location",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "get specified locations posts",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-posts-location",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "location",
+            "description": "a specific location"
+          }
+        ]
+      }
+    },
+    "/posts/{dateofposting}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "dateofposting",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "get specific dates posts",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "id": "string",
+                      "title": "string",
+                      "description": "string",
+                      "category": [
+                        {
+                          "category0": "string",
+                          "category1": "string",
+                          "jne": "string"
+                        }
+                      ],
+                      "location": "string",
+                      "images": [
+                        {
+                          "kuvat tänne jotenki": "string"
+                        }
+                      ],
+                      "askingprice": "string",
+                      "dateofposting": "string",
+                      "deliverytype": "string",
+                      "seller name": "string",
+                      "selleremail": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-posts-dateofposting",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "dateofposting",
+            "description": "a specific date"
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "title": "User",
+        "type": "object",
+        "description": "",
+        "examples": [
+          {
+            "id": "exampleuser",
+            "Name": "Alice",
+            "email": "alice.smith@gmail.com",
+            "userPassword": "salainensalasana"
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the given user."
+          },
+          "Name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "userPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "Name",
+          "email"
+        ]
+      },
+      "Posting": {
+        "title": "Posting",
+        "type": "object",
+        "description": "a single posting",
+        "examples": [
+          {
+            "id": "string",
+            "title": "string",
+            "description": "string",
+            "category": [
+              {
+                "category0": "string",
+                "category1": "string",
+                "jne": "string"
+              }
+            ],
+            "location": "string",
+            "images": [
+              {
+                "kuvat tänne jotenki": "string"
+              }
+            ],
+            "askingprice": "string",
+            "dateofposting": "string",
+            "deliverytype": "string",
+            "seller name": "string",
+            "selleremail": "string"
+          }
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category0": {
+                  "type": "string"
+                },
+                "category1": {
+                  "type": "string"
+                },
+                "jne": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "location": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kuvat tänne jotenki": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "askingprice": {
+            "type": "string"
+          },
+          "dateofposting": {
+            "type": "string"
+          },
+          "deliverytype": {
+            "type": "string"
+          },
+          "seller name": {
+            "type": "string"
+          },
+          "selleremail": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
