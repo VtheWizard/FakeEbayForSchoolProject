@@ -39,16 +39,11 @@
                   "$ref": "#/components/schemas/User"
                 },
                 "examples": {
-                  "Get User Alice Smith": {
-                    "value": {
-                      "id": 142,
-                      "firstName": "Alice",
-                      "lastName": "Smith",
-                      "email": "alice.smith@gmail.com",
-                      "dateOfBirth": "1997-10-31",
-                      "emailVerified": true,
-                      "signUpDate": "2019-08-24"
-                    }
+                  "example-1": {
+                    "id": "exampleuser",
+                    "Name": "Alice",
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
                   }
                 }
               }
@@ -73,16 +68,11 @@
                   "$ref": "#/components/schemas/User"
                 },
                 "examples": {
-                  "Updated User Rebecca Baker": {
-                    "value": {
-                      "id": 13,
-                      "firstName": "Rebecca",
-                      "lastName": "Baker",
-                      "email": "rebecca@gmail.com",
-                      "dateOfBirth": "1985-10-02",
-                      "emailVerified": false,
-                      "createDate": "2019-08-24"
-                    }
+                  "example-1": {
+                    "id": "exampleuser",
+                    "Name": "Alice",
+                    "email": "alice.smith@gmail.com",
+                    "userPassword": "salainensalasana"
                   }
                 }
               }
@@ -100,27 +90,12 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": {
-                    "type": "string"
-                  },
-                  "lastName": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "If a new email is given, the user's email verified property will be set to false."
-                  },
-                  "dateOfBirth": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/User"
               },
               "examples": {
-                "Update First Name": {
+                "Update Name": {
                   "value": {
-                    "firstName": "Rebecca"
+                    "Name": "Rebecca"
                   }
                 },
                 "Update Email": {
@@ -128,17 +103,27 @@
                     "email": "rebecca@gmail.com"
                   }
                 },
-                "Update Last Name & Date of Birth": {
-                  "value": {
-                    "lastName": "Baker",
-                    "dateOfBirth": "1985-10-02"
-                  }
+                "Update all info": {
+                  "id": "exampleuser",
+                  "Name": "Alice",
+                  "email": "alice.smith@gmail.com",
+                  "userPassword": "salainensalasana"
                 }
               }
             }
           },
           "description": "Patch user properties to update."
-        }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "APIkey",
+            "description": "API-key that was given when logging in"
+          }
+        ]
       }
     },
     "/user": {
@@ -230,147 +215,37 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "description": "",
-                  "type": "object",
-                  "properties": {
-                    "posting": {
-                      "type": "array",
-                      "uniqueItems": true,
-                      "minItems": 1,
-                      "items": {
-                        "required": [
-                          "id",
-                          "title",
-                          "description",
-                          "askingprice",
-                          "dateofposting",
-                          "deliverytype",
-                          "seller name",
-                          "selleremail",
-                          "location"
-                        ],
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "title": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "description": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "askingprice": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "dateofposting": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "deliverytype": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "seller name": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "selleremail": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "location": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "category": {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "minItems": 1,
-                            "items": {
-                              "required": [
-                                "category0",
-                                "category1",
-                                "jne"
-                              ],
-                              "properties": {
-                                "category0": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "category1": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "jne": {
-                                  "type": "string",
-                                  "minLength": 1
-                                }
-                              }
-                            }
-                          },
-                          "images": {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "minItems": 1,
-                            "items": {
-                              "required": [
-                                "kuvat tänne jotenki"
-                              ],
-                              "properties": {
-                                "kuvat tänne jotenki": {
-                                  "type": "string",
-                                  "minLength": 1
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "posting"
-                  ],
-                  "x-examples": {
-                    "example-1": {
-                      "posting": [
-                        {
-                          "id": "string",
-                          "title": "string",
-                          "description": "string",
-                          "askingprice": "string",
-                          "dateofposting": "string",
-                          "deliverytype": "string",
-                          "seller name": "string",
-                          "selleremail": "string",
-                          "location": "string",
-                          "category": [
-                            {
-                              "category0": "string",
-                              "category1": "string",
-                              "jne": "string"
-                            }
-                          ],
-                          "images": [
-                            {
-                              "kuvat tänne jotenki": "string"
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "id": "string",
+                    "title": "string",
+                    "description": "string",
+                    "category": [
+                      null
+                    ],
+                    "location": "string",
+                    "images": [
+                      null
+                    ],
+                    "askingprice": "string",
+                    "dateofposting": "string",
+                    "deliverytype": "string",
+                    "seller name": "string",
+                    "selleremail": "string"
                   }
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "operationId": "get-posts",
-        "description": "gets all postings"
+        "description": "gets all postings",
+        "parameters": []
       },
       "post": {
         "summary": "Create a posting",
@@ -378,9 +253,54 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
-        "description": "creates a posting"
+        "description": "creates a posting",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Posting"
+              },
+              "examples": {
+                "example-1": {
+                  "id": "string",
+                  "title": "string",
+                  "description": "string",
+                  "category": [
+                    null
+                  ],
+                  "location": "string",
+                  "images": [
+                    null
+                  ],
+                  "askingprice": "string",
+                  "dateofposting": "string",
+                  "deliverytype": "string",
+                  "seller name": "string",
+                  "selleremail": "string"
+                }
+              }
+            }
+          },
+          "description": "consists of listed info"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "APIkey",
+            "description": "API-key that was given when logging in to know who is making a posting"
+          }
+        ]
       }
     },
     "/posts/{postId}": {
@@ -394,31 +314,8 @@
           "required": true
         }
       ],
-      "patch": {
-        "summary": "",
-        "operationId": "patch-posts-postId",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "description": "edits a posting specified by id",
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "in": "header",
-            "name": "postId",
-            "description": "id of a specific posting"
-          }
-        ]
-      },
       "delete": {
-        "summary": "",
+        "summary": "Delete specific posting",
         "operationId": "delete-posts-postId",
         "responses": {
           "200": {
@@ -432,10 +329,106 @@
               "type": "string"
             },
             "in": "header",
-            "name": "postId",
-            "description": "id of a specific posting"
+            "name": "APIkey",
+            "description": "API-key to know if user is allowed to delete own posting"
           }
         ]
+      },
+      "put": {
+        "summary": "Edit specific posting",
+        "operationId": "put-posts-postId",
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {}
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "description": "edits a posting specified by id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Posting"
+              },
+              "examples": {
+                "example-1": {
+                  "id": "string",
+                  "title": "string",
+                  "description": "string",
+                  "category": [
+                    null
+                  ],
+                  "location": "string",
+                  "images": [
+                    null
+                  ],
+                  "askingprice": "string",
+                  "dateofposting": "string",
+                  "deliverytype": "string",
+                  "seller name": "string",
+                  "selleremail": "string"
+                }
+              }
+            }
+          },
+          "description": "will require full posting info"
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "APIkey",
+            "description": "API-key to know if user is allowed to edit posting"
+          }
+        ]
+      },
+      "get": {
+        "summary": "Get specific posting",
+        "operationId": "get-posts-postId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "id": "string",
+                    "title": "string",
+                    "description": "string",
+                    "category": [
+                      null
+                    ],
+                    "location": "string",
+                    "images": [
+                      null
+                    ],
+                    "askingprice": "string",
+                    "dateofposting": "string",
+                    "deliverytype": "string",
+                    "seller name": "string",
+                    "selleremail": "string"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "parameters": [],
+        "description": "gets a posting specified by id"
       }
     },
     "/login": {
@@ -583,6 +576,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "id": "string",
+                    "title": "string",
+                    "description": "string",
+                    "category": [
+                      null
+                    ],
+                    "location": "string",
+                    "images": [
+                      null
+                    ],
+                    "askingprice": "string",
+                    "dateofposting": "string",
+                    "deliverytype": "string",
+                    "seller name": "string",
+                    "selleremail": "string"
+                  }
                 }
               }
             }
@@ -630,6 +642,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Posting"
+                },
+                "examples": {
+                  "example-1": {
+                    "id": "string",
+                    "title": "string",
+                    "description": "string",
+                    "category": [
+                      null
+                    ],
+                    "location": "string",
+                    "images": [
+                      null
+                    ],
+                    "askingprice": "string",
+                    "dateofposting": "string",
+                    "deliverytype": "string",
+                    "seller name": "string",
+                    "selleremail": "string"
+                  }
                 }
               }
             }
@@ -672,29 +703,21 @@
                 },
                 "examples": {
                   "example-1": {
-                    "value": {
-                      "id": "string",
-                      "title": "string",
-                      "description": "string",
-                      "category": [
-                        {
-                          "category0": "string",
-                          "category1": "string",
-                          "jne": "string"
-                        }
-                      ],
-                      "location": "string",
-                      "images": [
-                        {
-                          "kuvat tänne jotenki": "string"
-                        }
-                      ],
-                      "askingprice": "string",
-                      "dateofposting": "string",
-                      "deliverytype": "string",
-                      "seller name": "string",
-                      "selleremail": "string"
-                    }
+                    "id": "string",
+                    "title": "string",
+                    "description": "string",
+                    "category": [
+                      null
+                    ],
+                    "location": "string",
+                    "images": [
+                      null
+                    ],
+                    "askingprice": "string",
+                    "dateofposting": "string",
+                    "deliverytype": "string",
+                    "seller name": "string",
+                    "selleremail": "string"
                   }
                 }
               }
@@ -761,17 +784,11 @@
             "title": "string",
             "description": "string",
             "category": [
-              {
-                "category0": "string",
-                "category1": "string",
-                "jne": "string"
-              }
+              null
             ],
             "location": "string",
             "images": [
-              {
-                "kuvat tänne jotenki": "string"
-              }
+              null
             ],
             "askingprice": "string",
             "dateofposting": "string",
@@ -792,34 +809,18 @@
           },
           "category": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "category0": {
-                  "type": "string"
-                },
-                "category1": {
-                  "type": "string"
-                },
-                "jne": {
-                  "type": "string"
-                }
-              }
-            }
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {}
           },
           "location": {
             "type": "string"
           },
           "images": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "kuvat tänne jotenki": {
-                  "type": "string"
-                }
-              }
-            }
+            "minItems": 0,
+            "maxItems": 4,
+            "items": {}
           },
           "askingprice": {
             "type": "string"
